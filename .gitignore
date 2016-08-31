@@ -1,0 +1,5 @@
+client
+data
+node_modules
+mongod
+server.js
