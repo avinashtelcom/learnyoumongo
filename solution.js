@@ -5,15 +5,27 @@ mongo.connect(url, function(err, db) {
     if(err) {
         throw err;
     }
-    var parrots = db.collection("parrots");
+    var prices = db.collection("prices");
     
-    parrots.count({
-        age: { $gt : parseInt(process.argv[2], 10) }
-    }, function(err, count) {
-        if(err) throw err;
-        console.log(count);
-        db.close();
-    });
-
+    prices.aggregate([
+        { 
+            $match: {
+                size: process.argv[2]
+            }
+        }
+       ,{ 
+           $group: {
+                _id: 'avg'
+                ,avg: {
+                    $avg: '$price'
+                }
+            }
+       }
+        ]).toArray(function(err, result) {
+            if(err) throw err;
+            console.log(Number(result[0].avg).toFixed(2));
+            db.close();
+        });
+    
     
 });
