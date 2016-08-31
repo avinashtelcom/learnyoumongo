@@ -1,16 +1,17 @@
 var mongo = require("mongodb").MongoClient;
-var url = "mongodb://"+process.env.IP+":27017/"+process.argv[2];
+var url = "mongodb://"+process.env.IP+":27017/learnyoumongo";
 
 mongo.connect(url, function(err, db) {
     if(err) {
         throw err;
     }
-    var collection = db.collection(process.argv[3]);
+    var parrots = db.collection("parrots");
     
-    collection.remove({
-        _id: process.argv[4]
-    }, function(err) {
+    parrots.count({
+        age: { $gt : parseInt(process.argv[2], 10) }
+    }, function(err, count) {
         if(err) throw err;
+        console.log(count);
         db.close();
     });
 
