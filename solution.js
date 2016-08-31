@@ -5,14 +5,10 @@ mongo.connect(url, function(err, db) {
     if(err) {
         throw err;
     }
-    var users = db.collection("users");
+    var collection = db.collection(process.argv[3]);
     
-    users.update({
-        username: 'tinatime'
-    }, {
-        $set: {
-            age: 40
-        }
+    collection.remove({
+        _id: process.argv[4]
     }, function(err) {
         if(err) throw err;
         db.close();
