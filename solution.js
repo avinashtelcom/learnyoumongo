@@ -7,6 +7,10 @@ mongo.connect(url, function(err, db) {
     var collection = db.collection("parrots");
     collection.find({
         age: { $gt: parseInt(process.argv[2], 10) }
+    }, {
+        name : 1,
+        age  : 1,
+        _id  : 0
     }).toArray(function(err, document) {
         if(err) {
             console.error("Error");
