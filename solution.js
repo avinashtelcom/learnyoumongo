@@ -1,21 +1,18 @@
 var mongo = require("mongodb").MongoClient;
 var url = "mongodb://"+process.env.IP+":27017/learnyoumongo";
+
 mongo.connect(url, function(err, db) {
     if(err) {
-        console.error("Error");
+        throw err;
     }
-    var collection = db.collection("parrots");
-    collection.find({
-        age: { $gt: parseInt(process.argv[2], 10) }
-    }, {
-        name : 1,
-        age  : 1,
-        _id  : 0
-    }).toArray(function(err, document) {
-        if(err) {
-            console.error("Error");
-        }
-        console.log(document);
-    });
+    var docs = db.collection("docs");
+    
+    var JSONobj = JSON.parse(JSON.stringify({
+        firstName: process.argv[2],
+        lastName: process.argv[3]
+    }));
+    
+    docs.insert(JSONobj);
+    console.log(JSON.stringify(JSONobj));
     db.close();
 });
